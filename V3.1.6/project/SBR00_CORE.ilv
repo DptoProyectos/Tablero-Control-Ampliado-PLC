@@ -1,0 +1,3 @@
+VAR
+    stDelay  AT  %L0.2 : BOOL ; (*  *) 
+END_VAR

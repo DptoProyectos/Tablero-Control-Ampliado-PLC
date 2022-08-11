@@ -1,0 +1,3 @@
+VAR_INPUT
+    TimPoll  AT  %LD42 : DINT ; (*  *) 
+END_VAR

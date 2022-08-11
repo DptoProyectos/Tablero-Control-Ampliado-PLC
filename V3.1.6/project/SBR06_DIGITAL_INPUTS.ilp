@@ -1,0 +1,69 @@
+(*2*)
+(* Network 0 *)
+(*YCHModo local desde el tablero*)
+LD    %I0.0
+ST   %M101.6
+(* Network 1 *)
+(*YCHValor de entrada digital  de estado ST0*)
+LD    TRUE
+CAL    SBR35    %I0.1, ST0
+(* Network 2 *)
+(*YCHFALLA ELECTRICALa falla eléctrica se activa justo en el momento en que la misma ocurre.*)
+LDN    %I0.4
+S    %M112.3
+(* Network 3 *)
+(*YCHFALLA ELECTRICALa falla eléctrica se desactiva cuando ha pasado 1 minuto entero de su restablecimiento para que quede registro de la misma*)
+LD    %I0.4
+TON   T86, 600
+__CR_EQ_1
+MOVE    T86, int0
+__CR_RESTORE
+R    %M112.3
+(* Network 4 *)
+(*YCHValor de entrada digital  de estado ST1*)
+LD    TRUE
+CAL    SBR36    %I0.5, ST1
+(* Network 5 *)
+(*YCHEntrada digital 0*)
+LD    %I1.0
+ST   %M113.6
+(* Network 6 *)
+(*YCHEntrada digital 1*)
+LD    %I1.1
+ST   %M113.7
+(* Network 7 *)
+(*YCHEntrada digital 2*)
+LD    %I1.2
+ST   %M114.0
+(* Network 8 *)
+(*YCHEntrada digital 3*)
+LD    %I1.3
+ST   %M114.1
+(* Network 9 *)
+(*YCHDETECCION DE FALLAS*)
+LD    TRUE
+CAL    SBR37    EnFailDet, DI_1, DI_2, DI_3, FailDetReset, FailDet, HmiFaseFail, HmiEngFail, HmiLevelFail
+(* Network 10 *)
+(*YCHGenero un pulso de un segndo de reset cada 10 minutos*)
+LD    %M115.7
+CAL    SBR38    FailDetReset
+(* Network 11 *)
+(*YCHEntrada digital 5.Esta entrada tiene la posibilidad de servir como detección y restablecimiento de fallas siempre que esto último esté habilitado*)
+LD    TRUE
+CAL    SBR34    EnableFailProt, %I1.5, DI_5, VarFail
+(* Network 12 *)
+(*YCHModulo que te calcula el tiempo en ms que hay entre un pulso y otro en la entrada contador CNT0*)
+LD    TRUE
+CAL    SBR15    TimePulseOn, %I0.2, PulseReset, TimePulseOff, PulseTime, int0
+(* Network 13 *)
+(*YCHModulo para contar el acumulado de todos los pulsos en la entrada contador CNT0*)
+LD    TRUE
+CAL    SBR16    TimePulseOn, %I0.2, TimePulseOff, PulseCount
+(* Network 14 *)
+(*YCHModulo que te calcula el tiempo en ms que hay entre un pulso y otro en la entrada contador CNT1*)
+LD    TRUE
+CAL    SBR25    TimePulseOn1, %I0.3, PulseReset1, TimePulseOff1, PulseTime1, int0
+(* Network 15 *)
+(*YCHModulo para contar todos los pulsos del contador de UTE*)
+LD    TRUE
+CAL    SBR24    TimePulseOn1, %I0.3, TimePulseOff1, PulseCount1

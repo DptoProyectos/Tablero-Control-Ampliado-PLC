@@ -1,0 +1,9 @@
+VAR_INPUT
+    DeltaRef  AT  %LD96 : REAL ; (*  *) 
+    DeltaOut  AT  %LD100 : REAL ; (*  *) 
+    Slogan  AT  %LD104 : REAL ; (*  *) 
+    Ref  AT  %LD108 : REAL ; (*  *) 
+END_VAR
+VAR_IN_OUT
+    Out  AT  %LD112 : REAL ; (*  *) 
+END_VAR

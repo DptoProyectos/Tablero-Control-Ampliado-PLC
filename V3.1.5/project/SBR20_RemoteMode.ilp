@@ -1,0 +1,26 @@
+(*2*)
+(* Network 0 *)
+(*YCHIndico el modo en el que estoy trabajando0 -> EMERGENCIA 1 -> LOCAL2 -> REMOTO3 -> AUTOMATICO*)
+LD    TRUE
+MOVE    2, WorkingMode
+(* Network 1 *)
+(*YCHTomo el control de las salidas*)
+LD    TRUE
+S    %M102.3
+(* Network 2 *)
+(*YCHPrendo o apago la bomba 1*)
+LD    %V3648.0
+ST   %M102.4
+(* Network 3 *)
+(*YCHPrendo la bomba 2 solo si esta prendida la bomba 1*)
+LD    %M101.7
+AND    %V3650.5
+ST   %M102.5
+(* Network 4 *)
+(*YCHSeteo la frecuencia de salida*)
+LD    TRUE
+MOVE    mbFreqPump, FreqPump
+(* Network 5 *)
+(*YCHMuestro el estado de la bomba en base a ST0*)
+LD    %M101.7
+ST   %M112.2

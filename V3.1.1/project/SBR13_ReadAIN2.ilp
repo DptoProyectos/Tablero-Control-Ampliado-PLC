@@ -1,0 +1,38 @@
+(*2*)
+(* Network 0 *)
+(*YCHIN/OUT MODULEValores de entrada y salida del modulo. Se usa como alternativa para ahorrar memoria del tipo L*)
+LD    TRUE
+MOVE    %AIW4, int2
+MOVE    AI2_Imin, int0
+MOVE    AI2_Imax, int1
+MOVE    AI2_Mmin, real1
+MOVE    AI2_Mmax, real2
+MOVE    AI2_Offset, real3
+(* Network 1 *)
+(*YCHCalculo el valor de la magnitud del sensorValido la medida solo si los rangos en mA se encuentran entre IMIN e IMAX*)
+LD    TRUE
+MUL    1000, int0
+MUL    1000, int1
+LINCO    int0, int1, real1, real2, 1.0, int2, dint0, real0
+GE    int2, int0
+LE    int2, int1
+MOVE    real0, AO
+ADD    real3, AO
+(* Network 2 *)
+(*YCHIndico magnitud de corriente del sensor fuera de los rangos de entrada por overloadDoy un margen superior de 0.030mA*)
+LD    TRUE
+ADD    30, int1
+GT    int2, int1
+ST   HIG
+(* Network 3 *)
+(*YCHIndico magnitud de corriente del sensor fuera de los rangos de entrada por underloadDoy un margen inferior de 0.030mA*)
+LD    TRUE
+SUB    30, int0
+LT    int2, int0
+ST   LOW
+(* Network 4 *)
+(*activación de alarma cuando pasen 60 segundos fuera de rango*)
+LD    LOW
+OR    HIG
+TON   T32, 600
+ST   ALAR

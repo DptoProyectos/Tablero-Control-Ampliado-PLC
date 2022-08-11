@@ -1,0 +1,59 @@
+(*2*)
+(* Network 0 *)
+(*YCHArranco con todas las salidas en 1*)
+LD    %SM0.1
+S    OUT1
+S    OUT2
+S    OUT3
+(* Network 1 *)
+(*YCHCondiciones que deshabilitan la falla*)
+LDN    ENABLE
+OR    RESET
+R    FAIL
+(* Network 2 *)
+(*YCH Condiciones que generan la falla*)
+LD    ENABLE
+AND(
+LD    SGN1
+OR    SGN2
+OR    SGN3
+)
+S    FAIL
+(* Network 3 *)
+(*YCHCondición para deshabilitar las salida OUT1*)
+LD    SGN1
+R    OUT1
+(* Network 4 *)
+(*YCHCondición para deshabilitar las salida OUT2*)
+LD    SGN2
+R    OUT2
+(* Network 5 *)
+(*YCHCondición para deshabilitar las salida OUT3*)
+LD    SGN3
+R    OUT3
+(* Network 6 *)
+(*YCHCondición para habilitar las salidas OUT1,2,3 cuando está activado el bloque de detección de fallas*)
+LD    ENABLE
+AND    RESET
+S    OUT1
+S    OUT2
+S    OUT3
+(* Network 7 *)
+(*YCHCondición para habilitar las salidas OUT1 cuando está desactivado el bloque de detección de fallas*)
+LDN    ENABLE
+ANDN    SGN1
+S    OUT1
+(* Network 8 *)
+(*YCHCondición para habilitar las salidas OUT2 cuando está desactivado el bloque de detección de fallas*)
+LDN    ENABLE
+ANDN    SGN2
+S    OUT2
+(* Network 9 *)
+(*YCHCondición para habilitar las salidas OUT3 cuando está desactivado el bloque de detección de fallas*)
+LDN    ENABLE
+ANDN    SGN3
+S    OUT3
+(* Network 10 *)
+(*YCHBajo la señal de reset*)
+LD    RESET
+R    RESET

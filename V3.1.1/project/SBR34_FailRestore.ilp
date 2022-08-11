@@ -1,0 +1,30 @@
+(*2*)
+(* Network 0 *)
+(*YCHLo que me llega en la entrada lo coloco en la salida*)
+LD    DI
+ST   OUT
+(* Network 1 *)
+(*YCHSi el bloque está activado (Enable) y detecto DI activo la falla para mandar a apagar las salidas. Esto se hace pasado 3 segundos de estar activa la entrada digital*)
+LD    Enable
+AND    DI
+TON   T89, 30
+__CR_EQ_1
+MOVE    T89, int0
+__CR_RESTORE
+S    FAIL
+S    failure
+(* Network 2 *)
+(*YCHUna vez activa la falla y apagadas las salidas se esperan 60 segundos para que el datalogger registre la misma, luego se prende la salida reset por un segundo y luego se desactiva la falla*)
+LD    failure
+TON   T87, 600
+__CR_EQ_1
+MOVE    T87, int0
+__CR_RESTORE
+S_BLK    1, %Q0.3
+TON   T88, 10
+__CR_EQ_1
+MOVE    T88, int0
+__CR_RESTORE
+R_BLK    1, %Q0.3
+R    FAIL
+R    failure

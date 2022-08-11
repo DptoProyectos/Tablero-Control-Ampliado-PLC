@@ -1,0 +1,23 @@
+(*2*)
+(* Network 0 *)
+(*YCHIndico el modo en el que estoy trabajando0 -> EMERGENCIA 1 -> LOCAL2 -> REMOTO3 -> AUTOMATICO*)
+LD    TRUE
+MOVE    1, WorkingMode
+(* Network 1 *)
+(*YCHTomo el control de las salidas*)
+LD    TRUE
+ST   %M102.3
+(* Network 2 *)
+(*YCHSeñal de prendido de la bomba 1*)
+LD    TRUE
+EQ    HmiPump1, B#1
+ST   %M102.4
+(* Network 3 *)
+(*YCHSeñal de prendido de la bomba 2*)
+LD    TRUE
+EQ    HmiPump2, B#1
+ST   %M102.5
+(* Network 4 *)
+(*YCHMuestro el estado de la bomba en base a ST0*)
+LD    %M101.7
+ST   %M112.2

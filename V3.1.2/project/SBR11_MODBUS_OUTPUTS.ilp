@@ -1,0 +1,157 @@
+(*2*)
+(* Network 0 *)
+(*YCHModo actual de trabajo100 -> EMERGENCIA | 101 -> LOCAL | 102 -REMOTO | 103 -> AUTOMATICO | 104 -> TIMER*)
+LD    TRUE
+MOVE    WorkingMode, mReg2067
+ADD    100, mReg2067
+(* Network 1 *)
+(*YCHMando vía modbus el que se esta trabajando en modo local*)
+LD    %M101.6
+ST   %V4014.0
+(* Network 2 *)
+(*YCHMando vía modbus el estado de la bomba de la perforación*)
+LD    %M112.2
+ST   %V4014.1
+(* Network 3 *)
+(*YCHMando vía modbus el estado de la bomba dosificadora*)
+LD    %M114.5
+ST   %V4014.5
+(* Network 4 *)
+(*YCHAlarma del canal analogico 0*)
+LD    %M101.0
+AND    %V3650.0
+ANDN    %M112.3
+ST   %V4014.2
+(* Network 5 *)
+(*YCHAlarma del canal analogico 1*)
+LD    %M101.3
+AND    %V3650.1
+ANDN    %M112.3
+ST   %V4014.3
+(* Network 6 *)
+(*YCHAlarma de falla térmicaSe activa cuando se manda a prender la salida de control cero (OC0) y no se recibe estado en la entrada de estado siempre que no se esté enmodo local*)
+LDN    %M101.6
+AND    %M102.3
+AND    %M102.4
+ANDN    %M101.7
+ANDN    %M112.3
+S    %V4014.4
+(* Network 7 *)
+(*YCHAlarma de falla térmicaSe desactiva cuando se prende la bomba*)
+LDN    %M101.6
+AND    %M102.3
+AND    %M102.4
+AND    %M101.7
+OR    %M112.3
+R    %V4014.4
+(* Network 8 *)
+(*YCHFALLA ELECTRICA*)
+LD    %M112.3
+ST   %V4015.0
+(* Network 9 *)
+(*YCHAlarma de apagado debido a protección*)
+LD    %M112.4
+ANDN    %M112.3
+ST   %V4015.1
+(* Network 10 *)
+(*YCHActivación de la entrada digital 0*)
+LD    %M113.6
+ST   %V4015.2
+(* Network 11 *)
+(*YCHActivación de la entrada digital 1*)
+LD    %M113.7
+ST   %V4015.3
+(* Network 12 *)
+(*YCHActivación de la entrada digital 2*)
+LD    %M114.0
+ST   %V4015.4
+(* Network 13 *)
+(*YCHActivación de la entrada digital 3*)
+LD    %M114.1
+ST   %V4015.5
+(* Network 14 *)
+(*YCHFalla detectada - Bombas apagadas*)
+LDN    %M114.7
+ORN    %M115.0
+ORN    %M115.1
+ST   %V4015.6
+(* Network 15 *)
+(*YCHActivación de la entrada digital 5*)
+LD    %M114.3
+ST   %V4015.7
+STN   %M114.6
+(* Network 16 *)
+(*YCHEnvío vía modbus la señal del del canal analógico AI_0*)
+LD    TRUE
+MOVE    AI0_mag, mReg2069
+(* Network 17 *)
+(*YCHEnvío vía modbus la señal del del canal analógico AI_1*)
+LD    TRUE
+MOVE    AI1_mag, mReg2071
+(* Network 18 *)
+(*YCHEnvío vía modbus la señal del del canal analógico AI_2*)
+LD    TRUE
+MOVE    AI2_mag, mReg403
+(* Network 19 *)
+(*YCHEnvío vía modbus la señal del del canal analógico AI_3*)
+LD    TRUE
+MOVE    AI3_mag, mReg405
+(* Network 20 *)
+(*YCHEnvío vía modbus la señal del del canal analógico AI_4*)
+LD    TRUE
+MOVE    AI4_mag, mReg407
+(* Network 21 *)
+(*YCHSeñal de flujo en CNT0 (UND/h)*)
+LD    TRUE
+MOVE    FlowCNT0, mReg2075
+(* Network 22 *)
+(*YCHSeñal de volumen que pasa por CNT0 (UND)*)
+LD    TRUE
+MOVE    VolCNT0, mReg2073
+(* Network 23 *)
+(*YCHSeñal de flujo en CNT1 (UND/h)*)
+LD    TRUE
+MOVE    FlowCNT1, mReg2083
+(* Network 24 *)
+(*YCHSeñal de volumen que pasa por CNT1 (UND)*)
+LD    TRUE
+MOVE    VolCNT1, mReg2079
+(* Network 25 *)
+(*YCHValor del horímetro para la entrada de estado 0 (ST0)*)
+LD    TRUE
+MOVE    ST0_Time, mReg413
+(* Network 26 *)
+(*YCHValor del horímetro para la entrada de estado 1 (ST1)*)
+LD    TRUE
+MOVE    ST1_Time, mReg415
+(* Network 27 *)
+(*YCHError Tx en la referencia 1 (principal)*)
+LD    %M112.0
+ANDN    %M112.3
+EQ    TypeRef, 0
+EQ    WebMode, 1
+ST   %V4014.6
+(* Network 28 *)
+(*YCHError Tx en la referencia 2 (emergencia)*)
+LD    %M112.1
+ANDN    %M112.3
+EQ    TypeRef, 0
+EQ    WebMode, 1
+ST   %V4014.7
+(* Network 29 *)
+(*YCHValor que se está usando de la referencia remota*)
+LD    TRUE
+MOVE    RemoteRef, mReg2131
+(* Network 30 *)
+(*YCHValor de frecuencia actual de trabajo*)
+LD    TRUE
+MOVE    FreqPump, mReg2077
+(* Network 31 *)
+(*YCHBit que indica alguna de las alarmas activas*)
+LD    %M112.3
+OR    %V4014.4
+OR    %M113.7
+OR    %M114.0
+OR    %M114.1
+OR    %V4015.6
+ST   %M115.4
